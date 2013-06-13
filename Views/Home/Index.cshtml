@@ -1,0 +1,37 @@
+﻿@model IPagedList<RestaurantListViewModel>
+@{
+    ViewBag.Title = "Home Page";
+}
+
+@*
+(1) AJAX Async Call                             
+ @using (Ajax.BeginForm(new AjaxOptions         
+    {                                           
+        HttpMethod = "get",                     
+        InsertionMode = InsertionMode.Replace,  
+        UpdateTargetId = "restaurantList"       
+    }))                                         
+                                                
+    <div id="retautantList">                    
+    </div>                                      
+(2) There is also an AJAX Action Link           
+(3) Client-side validation                      
+*@
+
+@*  jQuery instead of AJAX directly (uses custom jQuery in the otf.js)                                                        *@
+@*  --  action        ====> uses a Url Helper to generate a url to a controller action (Home controller Index action)         *@
+@*  data-otf-ajax     ====> a "data dash attribute" to identify that this form s/b AJAXY and behave asynchronously            *@
+@*  data-otf-target   ====> a "data dash attribute" to identify the DOM element that need to be updated                       *@
+@*                                                                                                                            *@
+
+@*  Use jQuery .Ajax to asynchronously populate the Partial View  *@
+
+<form method="get" action="@Url.Action("Index")" 
+      data-otf-ajax="true" data-otf-target="#restaurantList">
+
+    @* AutoComplete -- "data dash attribute" specifies the Home controller action and uses the otf.js *@
+    <input type="search" name="searchTerm" data-otf-autocomplete="@Url.Action("Autocomplete")" />
+    <input type="submit" value="Search By Name" />
+</form>
+
+@Html.Partial("_Restaurants", Model)
